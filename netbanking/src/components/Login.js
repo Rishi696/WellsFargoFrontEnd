@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css'; // You can create this CSS file for styling
 import axios from 'axios';
+import Navbar from './Navbar';
 
 function Login({setUserName}) {
 
@@ -50,8 +51,8 @@ function Login({setUserName}) {
              {
               console.log('Login successful');
               setUserName(user.name); // Set user's name in state or context
-              //navigate('/dashboard');
-              navigate('/create-account');
+              navigate('/dashboard');
+              //navigate('/create-account');
             } else {
               // User not found
               setLoginError('Invalid email or password');
@@ -67,6 +68,11 @@ function Login({setUserName}) {
   };
 
   return (
+
+    <>
+    
+    <Navbar/>
+   
     <div className="login-container">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
@@ -96,6 +102,7 @@ function Login({setUserName}) {
         <button type="submit">Login</button>
       </form>
     </div>
+    </>
   );
 }
 

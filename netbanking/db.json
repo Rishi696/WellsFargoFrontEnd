@@ -40,6 +40,18 @@
       "accountName": "rishi",
       "accountType": "savings",
       "balance": 0
+    },
+    {
+      "id": "0r2th6y5tkfd305sp21ffyt",
+      "accountName": "akshansh",
+      "accountType": "checking",
+      "balance": 60
+    },
+    {
+      "id": "0lbb4vmplrfo4ub42i089g",
+      "accountName": "w",
+      "accountType": "savings",
+      "balance": 0
     }
   ]
 }

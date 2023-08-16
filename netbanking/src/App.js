@@ -61,6 +61,8 @@ import './components/Admindashboard.css';
 import './components/Adminlogin.css';
 import CreateAccount from './components/CreateAccount';
 import './components/CreateAccount.css';
+import Navbar from './components/Navbar';
+
 
 function App() {
 
@@ -68,16 +70,18 @@ function App() {
 
   
   return (
-    <Router>
+   
       <div className="App">
+
+        <Navbar/>
        
-          <nav className="navbar">
+          {/* <nav className="navbar">
             <ul className="nav-list">
               <li className="nav-item"><Link to="/login">Login</Link></li>
               <li className="nav-item"><Link to="/signup">Signup</Link></li>
               <li className="nav-item"><Link to="/admin">Admin</Link></li>
             </ul>
-          </nav>
+          </nav> */}
 
 
         <Routes>
@@ -89,7 +93,7 @@ function App() {
           <Route path="/create-account" element={<CreateAccount userName={userName} />} />
         </Routes>
       </div>
-    </Router>
+    
   );
 }
 
