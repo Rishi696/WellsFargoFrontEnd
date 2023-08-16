@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css'; // You can create this CSS file for styling
+import axios from 'axios';
 
-function Login() {
+function Login({setUserName}) {
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [loginError, setLoginError] = useState('');
 
+  
   const navigate = useNavigate(); // Access the navigate function
 
 
@@ -37,15 +40,28 @@ function Login() {
     validatePassword();
 
     if (emailError === '' && passwordError === '') {
-      try {
-        // Simulated successful login
-        // Replace with actual backend authentication logic
-        console.log('Login successful');
-        navigate('/dashboard'); // Redirect to dashboard on successful login
-      } catch (error) {
-        console.error('Error:', error);
-        setLoginError('Invalid email or password');
-      }
+        try {
+           // const response = await axios.get(`http://localhost:8000/users?email=${email}&password=${password}`);
+           const response = await axios.get(`http://localhost:8000/users`);
+           const user = response.data.find((user) => user.email === email && user.password === password);
+            // if (response.data.length > 0) {
+              // User found
+             if(user)
+             {
+              console.log('Login successful');
+              setUserName(user.name); // Set user's name in state or context
+              //navigate('/dashboard');
+              navigate('/create-account');
+            } else {
+              // User not found
+              setLoginError('Invalid email or password');
+              console.log('Invalid credentials');
+            }
+          } catch (error) {
+            setLoginError('An error occurred');
+            console.error('Error:', error);
+            
+          }
     }
     
   };

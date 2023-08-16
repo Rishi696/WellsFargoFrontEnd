@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Signup.css'; // You can create this CSS file for styling
+import axios from 'axios'; // Import the Axios library
 
 function Signup() {
   const [username, setUsername] = useState('');
@@ -48,50 +49,33 @@ function Signup() {
     return validationErrors;
   };
 
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     const validationErrors = validateForm();
-    
-//     if (Object.keys(validationErrors).length === 0) {
-      
-//     } else {
-//       setErrors(validationErrors);
-//     }
-//   };
 const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
-  
-    if (Object.keys(validationErrors).length === 0) {
-      try {
-        const response = await fetch('http://backend-api-url/signup', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username,
-            email,
-            password,
-            aadhar,
-            address,
-            dob,
-            phone,
-          }),
+
+    try {
+        const response = await axios.post('http://localhost:8000/users', {
+          username,
+          email,
+          password,
+        //   confirmPassword,
+        //   aadhar,
+        //   address,
+        //   dob,
+        //   phone
+          // ... other data fields
         });
   
-        if (response.ok) {
-          console.log('User registered successfully');
-          // Optionally, you can redirect the user to another page
+        if (response.status === 201) {
+          console.log('User added successfully');
+          // You can perform any action upon successful user addition
         } else {
-          console.error('Error registering user');
+          console.error('Error adding user');
         }
       } catch (error) {
         console.error('Error:', error);
       }
-    } else {
-      setErrors(validationErrors);
-    }
+    
   };
 
   return (
