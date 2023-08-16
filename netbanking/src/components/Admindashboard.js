@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import './Admindashboard.css';
 function AdminDashboard() {
-  const [userDetails, setUserDetails] = useState([]);
+  const [user, setUsers] = useState([]);
 
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  const loadUsers = async () => {
+    const result = await axios.get("http://localhost:8080/admin/admin");
+    // console.log(result);
+    setUsers(result.data);
+  };
+/*
   useEffect(() => {
     // Fetch user details from your backend API
     // For example: fetchUserDetails().then(data => setUserDetails(data));
@@ -13,7 +24,7 @@ function AdminDashboard() {
     ];
     setUserDetails(simulatedUserDetails);
   }, []);
-
+*/
   return (
     <div className="admin-dashboard-container">
       <h2>Admin Dashboard</h2>
@@ -22,19 +33,23 @@ function AdminDashboard() {
           <tr>
             <th>ID</th>
             <th>Username</th>
+            {/* <th>Password</th> */}
             <th>Email</th>
-            <th>Balance</th>
+            <th>Contact</th>
           </tr>
         </thead>
         <tbody>
-          {userDetails.map(user => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.username}</td>
+
+          {user.map(user => (
+            <tr key={user.customer_id}>
+              <td>{user.customer_id}</td>
+              <td>{user.customer_name}</td>
+              {/* <td>{user.password}</td> */}
               <td>{user.email}</td>
-              <td>${user.balance}</td>
+              <td>{user.contact}</td>
             </tr>
           ))}
+          
         </tbody>
       </table>
     </div>

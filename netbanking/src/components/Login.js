@@ -14,6 +14,8 @@ function Login({setUserName}) {
   
   const navigate = useNavigate(); // Access the navigate function
 
+  
+
 
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,14 +44,19 @@ function Login({setUserName}) {
     if (emailError === '' && passwordError === '') {
         try {
            // const response = await axios.get(`http://localhost:8000/users?email=${email}&password=${password}`);
-           const response = await axios.get(`http://localhost:8000/users`);
-           const user = response.data.find((user) => user.email === email && user.password === password);
+           const UserData={
+            email,
+            password
+           };
+           const response = await axios.post('http://localhost:8080/customer/auth',UserData);
+           //const user = response.data.find((user) => user.email === email && user.password === password);
             // if (response.data.length > 0) {
               // User found
-             if(user)
+              console.log(response);
+             if(response)
              {
               console.log('Login successful');
-              setUserName(user.name); // Set user's name in state or context
+              //setUserName(user.name); // Set user's name in state or context
               //navigate('/dashboard');
               navigate('/create-account');
             } else {
