@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
+import axios from "axios";
 import './Signup.css'; // You can create this CSS file for styling
-import axios from 'axios'; // Import the Axios library
 
 function Signup() {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
+  const [customer_name, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [aadhar, setAadhar] = useState('');
-  const [address, setAddress] = useState('');
-  const [dob, setDob] = useState('');
-  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  //const [confirmPassword, setConfirmPassword] = useState('');
+  // const [aadhar, setAadhar] = useState('');
+  // const [address, setAddress] = useState('');
+  // const [dob, setDob] = useState('');
+  const [contact, setPhone] = useState('');
   
   const [errors, setErrors] = useState({});
 
@@ -30,52 +30,72 @@ function Signup() {
     }
   };
 
-  const validateAadhar = () => {
-    if (aadhar.length !== 12) {
-      setErrors({ ...errors, aadhar: 'Aadhar number must be 12 digits' });
-    } else {
-      setErrors({ ...errors, aadhar: '' });
-    }
-  };
+  // const validateAadhar = () => {
+  //   if (aadhar.length !== 14) {
+  //     setErrors({ ...errors, aadhar: 'Aadhar number must be 14 digits' });
+  //   } else {
+  //     setErrors({ ...errors, aadhar: '' });
+  //   }
+  // };
 
   const validateForm = () => {
     const validationErrors = {};
     validateEmail();
     validatePassword();
-    validateAadhar();
+    //validateAadhar();
     
     // Implement more validation rules here
 
     return validationErrors;
   };
 
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     const validationErrors = validateForm();
+    
+//     if (Object.keys(validationErrors).length === 0) {
+      
+//     } else {
+//       setErrors(validationErrors);
+//     }
+//   };
 const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
-
-    try {
-        const response = await axios.post('http://localhost:8000/users', {
-          username,
-          email,
-          password,
-        //   confirmPassword,
-        //   aadhar,
-        //   address,
-        //   dob,
-        //   phone
-          // ... other data fields
-        });
   
-        if (response.status === 201) {
-          console.log('User added successfully');
-          // You can perform any action upon successful user addition
+    if (Object.keys(validationErrors).length === 0) {
+      try {
+        let data = JSON.stringify({
+          customer_name,
+          password,
+          email,
+          contact,
+        })
+        const response = await axios({url:'http://localhost:8080/admin/customer', 
+          method: 'POST',
+          data,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log(response)
+  
+        if (response) {
+          console.log('User registered successfully');
+          //java.lang.System.out.println("Successful");
+          window.alert("Successfully Registered");
+          // Optionally, you can redirect the user to another page
         } else {
-          console.error('Error adding user');
+          console.error('Error registering user');
+          window.alert("Failed to register");
         }
       } catch (error) {
         console.error('Error:', error);
       }
-    
+    } else {
+      setErrors(validationErrors);
+    }
   };
 
   return (
@@ -83,24 +103,13 @@ const handleSubmit = async (e) => {
       <h2>Sign Up</h2>
       <form onSubmit={handleSubmit}>
         <div className="input-group">
-          <label>Username</label>
+          <label>Customer name</label>
           <input
             type="text"
-            value={username}
+            value={customer_name}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-        </div>
-        <div className="input-group">
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onBlur={validateEmail}
-            required
-          />
-          {errors.email && <span className="error-message">{errors.email}</span>}
         </div>
         <div className="input-group">
           <label>Password</label>
@@ -113,49 +122,24 @@ const handleSubmit = async (e) => {
           />
           {errors.password && <span className="error-message">{errors.password}</span>}
         </div>
+        
         <div className="input-group">
-          <label>Confirm Password</label>
+          <label>Email</label>
           <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onBlur={validateEmail}
             required
           />
+          {errors.email && <span className="error-message">{errors.email}</span>}
         </div>
-        <div className="input-group">
-          <label>Aadhar Number</label>
-          <input
-            type="text"
-            value={aadhar}
-            onChange={(e) => setAadhar(e.target.value)}
-            onBlur={validateAadhar}
-            required
-          />
-          {errors.aadhar && <span className="error-message">{errors.aadhar}</span>}
-        </div>
-        <div className="input-group">
-          <label>Address</label>
-          <input
-            type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-          />
-        </div>
-        <div className="input-group">
-          <label>Date of Birth</label>
-          <input
-            type="date"
-            value={dob}
-            onChange={(e) => setDob(e.target.value)}
-            required
-          />
-        </div>
+
         <div className="input-group">
           <label>Phone Number</label>
           <input
             type="tel"
-            value={phone}
+            value={contact}
             onChange={(e) => setPhone(e.target.value)}
             required
           />
