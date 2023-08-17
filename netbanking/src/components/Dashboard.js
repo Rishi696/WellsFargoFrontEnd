@@ -3,8 +3,12 @@ import React from 'react';
 import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom';
 import CreateAccount from './CreateAccount';
 import AccountSummary from './AccountSummary';
-import './CreateAccount.css'
-import './AccountSummary.css'
+import TransactionPage from './TransactionPage';
+import './TransactionPage.css';
+import './CreateAccount.css';
+import './AccountSummary.css';
+import './dashboard_navbar.css';
+import dashboard_navbar from './dashboard_navbar';
 //import TransferMoney from './TransferMoney';
 
 // Define the Dashboard component
@@ -12,14 +16,18 @@ const Dashboard = () => {
   return (
     
       <div>
+
         <nav>
+
           <ul>
-            <li>
-              <Link to="/create-account">Create Account</Link>
-            </li>
+
             <li>
               <Link to="/account-summary">Account Summary</Link>
             </li>
+            <li>
+              <Link to="/transaction-page">Transaction</Link>
+            </li>
+            
             {/* <li>
               <Link to="/transfer-money">Transfer Money</Link>
             </li> */}
@@ -27,12 +35,8 @@ const Dashboard = () => {
         </nav>
 
         <Routes>
-          <Route path="/dashboard/create-account">
-            <CreateAccount />
-          </Route>
-          <Route path="/dashboard/account-summary">
-            <AccountSummary />
-          </Route>
+        <Route path="/transaction-page" element={<TransactionPage />} />
+        <Route path="/account-summary" element={<AccountSummary />} />
           {/* <Route path="/transfer-money">
             <TransferMoney />
           </Route> */}

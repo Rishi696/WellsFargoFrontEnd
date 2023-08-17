@@ -6,7 +6,7 @@ import Navbar from './Navbar';
 
 function Login({setUserName}) {
 
-  const [email, setEmail] = useState('');
+  const [userName, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -20,7 +20,7 @@ function Login({setUserName}) {
 
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(userName)) {
       setEmailError('Please enter a valid email address');
     } else {
       setEmailError('');
@@ -46,24 +46,33 @@ function Login({setUserName}) {
         try {
            // const response = await axios.get(`http://localhost:8000/users?email=${email}&password=${password}`);
            const UserData={
-            email,
+            userName,
             password
            };
+           console.log(JSON.stringify(UserData))
            const response = await axios.post('http://localhost:8080/customer/auth',UserData);
+           console.log(JSON.stringify(response.data))
            //const user = response.data.find((user) => user.email === email && user.password === password);
             // if (response.data.length > 0) {
               // User found
-              console.log(response);
-             if(response)
-             {
+            if(response.data)
+            {
               console.log('Login successful');
               //setUserName(user.name); // Set user's name in state or context
               //navigate('/dashboard');
-              navigate('/create-account');
             } else {
               // User not found
               setLoginError('Invalid email or password');
               console.log('Invalid credentials');
+            }
+            
+            const response1 = await axios.post('http://localhost:8080/customer/getaccount',JSON.parse(JSON.stringify(response.data)));
+            console.log("below is response1")
+            console.log(response1.data)
+            if(response1.data){
+              navigate('/dashboard');
+            } else {
+              navigate('/create-account');
             }
           } catch (error) {
             setLoginError('An error occurred');
@@ -78,7 +87,7 @@ function Login({setUserName}) {
 
     <>
     
-    <Navbar/>
+    {/* <Navbar/> */}
    
     <div className="login-container">
       <h2>Login</h2>
@@ -87,7 +96,7 @@ function Login({setUserName}) {
           <label>Email</label>
           <input
             type="email"
-            value={email}
+            value={userName}
             onChange={(e) => setEmail(e.target.value)}
             onBlur={validateEmail}
             required
